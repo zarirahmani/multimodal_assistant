@@ -1,44 +1,50 @@
-from streamlit import st
-from PIL import Image
-import requests
-import io
+import streamlit as st
+import os
+from llama_index.llms.openai import OpenAI
+from llama_index.core.llms import ChatMessage, ImageBlock, TextBlock, MessageRole
 
-def render_text_input():
-    """Render text input field for user queries."""
-    user_input = st.text_input("Enter your query:")
-    return user_input
+# Load API key from environment or Streamlit secrets
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    try:
+        OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+    except Exception:
+        OPENAI_API_KEY = ""
 
-def render_image_upload():
-    """Render image upload field for user queries."""
-    uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption='Uploaded Image', use_column_width=True)
-        return uploaded_file
-    return None
+if not OPENAI_API_KEY:
+    st.error("OpenAI API key not found. Please set it in your environment or Streamlit secrets.")
+    st.stop()
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
-def display_results(response):
-    """Display the results from the LLM."""
-    st.subheader("Response:")
-    st.write(response)
+# Initialize LLM
+openai_llm = OpenAI(model="gpt-4o", max_new_tokens=300)
 
-def render_ui():
-    """Render the main UI components."""
-    st.title("Multimodal AI Assistant")
-    st.write("Ask me anything or upload an image for analysis.")
+def multimodal_query(text, image_file=None):
+    """Send a multimodal query (text + optional image) to the LLM."""
+    blocks = []
+    if text:
+        blocks.append(TextBlock(text=text))
+    if image_file:
+        # Save uploaded image to a temp file
+        img_path = "uploaded_image.jpg"
+        with open(img_path, "wb") as f:
+            f.write(image_file.read())
+        blocks.append(ImageBlock(path=img_path, image_mimetype=image_file.type))
+    msg = ChatMessage(role=MessageRole.USER, blocks=blocks)
+    response = openai_llm.chat(messages=[msg])
+    return response
 
-    user_query = render_text_input()
-    uploaded_image = render_image_upload()
+# Streamlit UI
+st.title("🖼️🤖 Multimodal AI Assistant")
+st.write("Ask a question with text and/or image. Powered by GPT-4o.")
 
-    if st.button("Submit"):
-        if user_query:
-            # Call the LLM processing function here
-            response = process_text_query(user_query)
-            display_results(response)
-        elif uploaded_image:
-            # Call the LLM processing function for image here
-            response = process_image_query(uploaded_image)
-            display_results(response)
-        else:
-            st.warning("Please enter a query or upload an image.")
+with st.form("query_form"):
+    user_text = st.text_area("Enter your question:", "")
+    user_image = st.file_uploader("Upload an image (optional):", type=["jpg", "jpeg", "png"])
+    submitted = st.form_submit_button("Ask")
 
+if submitted:
+    with st.spinner("Thinking..."):
+        response = multimodal_query(user_text, user_image)
+        st.markdown("**Assistant Response:**")
+        st.write(response)
