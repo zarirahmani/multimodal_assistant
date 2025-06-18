@@ -3,6 +3,7 @@ import os
 from llama_index.llms.openai import OpenAI
 from llama_index.core.llms import ChatMessage, ImageBlock, TextBlock, MessageRole
 from dotenv import load_dotenv
+# Load environment variables from .env file
 load_dotenv()
 # Loading API key from environment or Streamlit secrets
 
