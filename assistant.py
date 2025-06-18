@@ -30,7 +30,7 @@ def multimodal_query(text, image_file=None):
         blocks.append(TextBlock(text=text))
     if image_file:
         # Save uploaded image to a temp file
-        img_path = "uploaded_image.jpg"
+        img_path = "image/uploaded_image.jpg"
         with open(img_path, "wb") as f:
             f.write(image_file.read())
         blocks.append(ImageBlock(path=img_path, image_mimetype=image_file.type))
@@ -67,20 +67,20 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-
-st.title("🤹🏻‍♀️ I'm your assistant!")
+st.title("🤹🏻‍♀️ Hiya! I'm your assistant!")
 #st.write("📎📷 You can ask me any questions you have! I can also help you with any questions about your photo! Upload your image and write your question in the box!")
 st.markdown("#### 📎 You can ask me any questions you have.", unsafe_allow_html=True)
 st.markdown("#### 📷 I can also help you with any questions about your photo.", unsafe_allow_html=True)
 
+
+
 with st.form("query_form"):
     user_text = st.text_area("**✍🏽 Write your question here:**", "")
-    user_image = st.file_uploader("**🎞️ Upload your image here and write your question in the box above:**", type=["jpg", "jpeg", "png"])
     submitted = st.form_submit_button("Ask")
 
-if user_image:
-    st.image(user_image, caption="Uploaded Image", use_container_width=True)
+user_image = st.file_uploader("**🎞️ Upload your image here and write your question in the box above:**", type=["jpg", "jpeg", "png"])
+if user_image is not None:
+    st.image(user_image, caption="Uploaded Image", use_container_width = True)
 
 if submitted:
     with st.spinner("Give me a second..."):
