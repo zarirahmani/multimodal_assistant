@@ -31,6 +31,8 @@ def multimodal_query(text, image_file=None):
         blocks.append(TextBlock(text=text))
     if image_file:
         # Save uploaded image to a temp file
+        # Ensure the directory exists
+        os.makedirs("image", exist_ok=True)
         img_path = "image/uploaded_image.jpg"
         with open(img_path, "wb") as f:
             f.write(image_file.read())
