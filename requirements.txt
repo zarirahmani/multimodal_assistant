@@ -4,3 +4,4 @@ pandas
 numpy
 llama-index-llms-openai
 matplotlib
+python-dotenv
