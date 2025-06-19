@@ -85,7 +85,7 @@ if user_image is not None:
     st.image(user_image, caption="Uploaded Image", use_container_width = True)
 
 if submitted:
-    with st.spinner("Give me a second..."):
+    with st.spinner("Give me a second... My brain is processing yoru question!"):
         response = multimodal_query(user_text, user_image)
         # Extracting the assistant's message
         try:
