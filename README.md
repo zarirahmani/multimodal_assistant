@@ -37,8 +37,7 @@ cd multimodal_assistant
 ```bash
 pip install -r requirements.txt
 ```
-4. Adding your API key:
-You can either use the command:
+4. Add your API key. You can either use the command:
 ```bash
 export OPENAI_API_KEY='enter your key here'
 ```
