@@ -1,2 +1,6 @@
 .env
+<<<<<<< HEAD
 .streamlit/secrets.toml
+=======
+secrets.tmol
+>>>>>>> 4864ac22 (Update gitignore and assistant.py)
