@@ -8,16 +8,15 @@ load_dotenv()
 # Loading API key from environment or Streamlit secrets
 
 
-OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
-if not OPENAI_API_KEY:
-    try:
-        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    except Exception:
-        OPENAI_API_KEY = ""
+try:
+    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+except KeyError:
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 
 if not OPENAI_API_KEY:
     st.error("OpenAI API key not found. Please set it in your environment or Streamlit secrets.")
     st.stop()
+
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 
