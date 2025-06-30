@@ -2,7 +2,7 @@
 
 ## Overview
 
-Powered by the cutting-edge Large Language Model GPT-4o and wrapped in a streamlit app, this app allows users to interact either in text or by uploading images. The app answers users' typed questions or interpret images uploaded by users.
+Powered by the cutting-edge Large Language Model GPT-4o and wrapped in a streamlit app, this app allows users to interact either in text or by uploading images. The app answers users' typed questions or interpret images uploaded by users. [See the app](https://multimodalassistant-zr.streamlit.app/)
 
 ## Features
 
